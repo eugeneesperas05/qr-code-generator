@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QR Code Generator</title>
+    <style>
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      #qr-code {
+        border: 1px solid #000;
+        /* width: 200px;
+        height: 200px; */
+        display: none;
+      }
+      img {
+        /* width: 100%;
+        height: 100%; */
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>QR Code Generator</h1>
+      <input type="text" id="input" />
+      <button class="btn">Generate</button>
+      <div id="qr-code">
+        <img id="myImg" alt="image" />
+      </div>
+    </div>
+
+    <script>
+      const btn = document.querySelector(".btn");
+      btn.addEventListener("click", () => {
+        const qrData = document.querySelector("#input").value;
+        const imageContainer = document.querySelector("#qr-code");
+        const image = document.querySelector("#myImg");
+        let url = `https://api.apgy.in/qr/?data=${qrData}`;
+        if (qrData == "") {
+          alert("Enter Code to generate!");
+          image.style.display = "none";
+        } else {
+          fetch(url)
+            .then((response) => response.blob())
+            .then((blob) => {
+              const imgURL = URL.createObjectURL(blob);
+              imageContainer.style.display = "flex";
+              image.src = imgURL;
+              image.style.display = "flex";
+            })
+            .catch((error) => {
+              console.error("Error fetching the QR code:", error);
+            });
+        }
+      });
+    </script>
+  </body>
+</html>
